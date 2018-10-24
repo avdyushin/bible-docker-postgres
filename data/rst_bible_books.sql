@@ -7,9 +7,9 @@ DROP TABLE IF EXISTS rst_bible_books;
 
 CREATE TABLE rst_bible_books (
     id   SMALLINT NOT NULL PRIMARY KEY,
-    book VARCHAR(40) DEFAULT NULL,
-    alt  VARCHAR(20) DEFAULT NULL,
-    abbr VARCHAR(20) DEFAULT NULL,
+    book VARCHAR(40) NOT NULL,
+    alt  VARCHAR(20) NOT NULL,
+    abbr VARCHAR(20) NOT NULL,
     UNIQUE (book, alt, abbr)
 );
 

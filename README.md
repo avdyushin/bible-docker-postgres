@@ -11,9 +11,9 @@ It contains 4 tables with `rst_` prefix:
 ```sql
 CREATE TABLE rst_bible_books (
     id   SMALLINT NOT NULL PRIMARY KEY,
-    book VARCHAR(40) DEFAULT NULL,
-    alt  VARCHAR(20) DEFAULT NULL,
-    abbr VARCHAR(20) DEFAULT NULL,
+    book VARCHAR(40) NOT NULL,
+    alt  VARCHAR(20) NOT NULL,
+    abbr VARCHAR(20) NOT NULL,
     UNIQUE (book, alt, abbr)
 );
 ```
@@ -22,10 +22,10 @@ CREATE TABLE rst_bible_books (
 
 ```sql
 CREATE TABLE rst_bible (
-    book_id SMALLINT NOT NULL DEFAULT '0',
-    chapter SMALLINT NOT NULL DEFAULT '0',
-    verse   SMALLINT NOT NULL DEFAULT '0',
-    text    TEXT,
+    book_id SMALLINT NOT NULL,
+    chapter SMALLINT NOT NULL,
+    verse   SMALLINT NOT NULL,
+    text    TEXT NOT NULL,
     PRIMARY KEY (book_id, chapter, verse)
 );
 ```
@@ -35,11 +35,11 @@ CREATE TABLE rst_bible (
 ```sql
 CREATE TABLE rst_bible_daily (
     id      SERIAL PRIMARY KEY,
-    month   SMALLINT NOT NULL DEFAULT '0',
-    day     SMALLINT NOT NULL DEFAULT '0',
-    morning VARCHAR(1) NOT NULL DEFAULT '0',
-    evening VARCHAR(1) NOT NULL DEFAULT '0',
-    verses  VARCHAR(1024)
+    month   SMALLINT NOT NULL,
+    day     SMALLINT NOT NULL,
+    morning VARCHAR(1) NOT NULL,
+    evening VARCHAR(1) NOT NULL,
+    verses  VARCHAR(1024) NOT NULL
 );
 ```
 
@@ -50,9 +50,9 @@ Verses goes in plain text with bible references: `Флп 3:13,14 Иоан 17:24;
 
 ```sql
 CREATE TABLE rst_bible_daily_roberts (
-    month  SMALLINT NOT NULL DEFAULT '0',
-    day    SMALLINT NOT NULL DEFAULT '0',
-    verses VARCHAR(128),
+    month  SMALLINT NOT NULL,
+    day    SMALLINT NOT NULL,
+    verses VARCHAR(128) NOT NULL,
     PRIMARY KEY (month, day)
 );
 ```

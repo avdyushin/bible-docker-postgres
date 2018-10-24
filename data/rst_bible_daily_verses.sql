@@ -7,11 +7,11 @@ DROP TABLE IF EXISTS rst_bible_daily;
 
 CREATE TABLE rst_bible_daily (
     id      SERIAL PRIMARY KEY,
-    month   SMALLINT NOT NULL DEFAULT '0',
-    day     SMALLINT NOT NULL DEFAULT '0',
-    morning VARCHAR(1) NOT NULL DEFAULT '0',
-    evening VARCHAR(1) NOT NULL DEFAULT '0',
-    verses  VARCHAR(1024)
+    month   SMALLINT NOT NULL,
+    day     SMALLINT NOT NULL,
+    morning VARCHAR(1) NOT NULL,
+    evening VARCHAR(1) NOT NULL,
+    verses  VARCHAR(1024) NOT NULL
 );
 
 INSERT INTO rst_bible_daily (month, day, morning, evening, verses) VALUES
