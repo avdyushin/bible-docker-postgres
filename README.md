@@ -34,6 +34,7 @@ CREATE TABLE rst_bible (
 
 ```sql
 CREATE TABLE rst_bible_daily (
+    id      SERIAL PRIMARY KEY,
     month   SMALLINT NOT NULL DEFAULT '0',
     day     SMALLINT NOT NULL DEFAULT '0',
     morning VARCHAR(1) NOT NULL DEFAULT '0',
@@ -51,7 +52,8 @@ Verses goes in plain text with bible references: `Флп 3:13,14 Иоан 17:24;
 CREATE TABLE rst_bible_daily_roberts (
     month  SMALLINT NOT NULL DEFAULT '0',
     day    SMALLINT NOT NULL DEFAULT '0',
-    verses VARCHAR(128)
+    verses VARCHAR(128),
+    PRIMARY KEY (month, day)
 );
 ```
 

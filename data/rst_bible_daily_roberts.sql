@@ -8,7 +8,8 @@ DROP TABLE IF EXISTS rst_bible_daily_roberts;
 CREATE TABLE rst_bible_daily_roberts (
     month  SMALLINT NOT NULL DEFAULT '0',
     day    SMALLINT NOT NULL DEFAULT '0',
-    verses VARCHAR(128)
+    verses VARCHAR(128),
+    PRIMARY KEY (month, day)
 );
 
 INSERT INTO rst_bible_daily_roberts VALUES

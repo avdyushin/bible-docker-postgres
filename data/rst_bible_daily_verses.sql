@@ -6,6 +6,7 @@
 DROP TABLE IF EXISTS rst_bible_daily;
 
 CREATE TABLE rst_bible_daily (
+    id      SERIAL PRIMARY KEY,
     month   SMALLINT NOT NULL DEFAULT '0',
     day     SMALLINT NOT NULL DEFAULT '0',
     morning VARCHAR(1) NOT NULL DEFAULT '0',
@@ -13,7 +14,7 @@ CREATE TABLE rst_bible_daily (
     verses  VARCHAR(1024)
 );
 
-INSERT INTO rst_bible_daily VALUES
+INSERT INTO rst_bible_daily (month, day, morning, evening, verses) VALUES
 (01, 01, 1, 0, 'Флп 3:13,14 Иоан 17:24; 2 Тим 1:12 Флп 1:6; 1 Кор 9:24,25 Евр 12:1,2'),
 (01, 01, 0, 1, 'Втор 31:8 Исх 33:15 Иер 10:23 Пс 37:23,24 73:23,24 Рим 8:38,39'),
 (01, 02, 1, 0, 'Ис 42:10 Пс 81:1,2 40:3 Нав 1:9 Неем 8:10 Ac 28:15 Рим 13:11-14'),
