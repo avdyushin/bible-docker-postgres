@@ -1,0 +1,19 @@
+version: "3.0"
+
+services:
+    db:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: always
+        networks:
+            - network
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: docker
+            POSTGRES_PASSWORD: docker
+            POSTGRES_DB: bible
+
+networks:
+    network:
