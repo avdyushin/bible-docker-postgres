@@ -2,9 +2,10 @@
 ## About
 
 This is Bible texts in PostrgeSQL database packed into Docker container.
-It has only Russian Synodal Translation [RST](https://en.wikipedia.org/wiki/Russian_Synodal_Bible) for now.
+It has the Russian Synodal Translation [RST](https://en.wikipedia.org/wiki/Russian_Synodal_Bible) and
+the King James Version [KJV](https://en.wikipedia.org/wiki/King_James_Version) versions.
 
-It contains 4 tables with `rst_` prefix:
+Table names are start with bible version prefix:
 
 ### Book names
 
@@ -131,4 +132,10 @@ bible=# \dt
 
 Just connect to Docker's IP address to port `5432` with `docker` user and `docker` password.
 Database name is `bible`.
+
+## Bible source
+
+Books in Unbound Bible format: [Unbound](http://unbound.biola.edu/index.cfm?method=downloads.showDownloadMain)
+
+Converters to SQL format are [here](https://gist.github.com/avdyushin/0555221cb4703ca5ba4f55038d253964)
 
