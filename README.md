@@ -133,9 +133,9 @@ bible=# \dt
 Just connect to Docker's IP address to port `5432` with `docker` user and `docker` password.
 Database name is `bible`.
 
-## Bible source
+## Resources
 
-Books in Unbound Bible format: [Unbound](http://unbound.biola.edu/index.cfm?method=downloads.showDownloadMain)
-
-Converters to SQL format are [here](https://gist.github.com/avdyushin/0555221cb4703ca5ba4f55038d253964)
+1. Books in Unbound Bible format: [Unbound](http://unbound.biola.edu/index.cfm?method=downloads.showDownloadMain)
+2. Abbreviations for KJV from [here](https://www.logos.com/bible-book-abbreviations)
+3. Converters to SQL format are [here](https://gist.github.com/avdyushin/0555221cb4703ca5ba4f55038d253964)
 
