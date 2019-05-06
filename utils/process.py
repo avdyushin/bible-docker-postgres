@@ -1,18 +1,24 @@
 #!/usr/bin/python
 
-from dataclasses import dataclass
 import re
 import sqlite3
+import itertools
+import dataclasses
 
-@dataclass
+@dataclasses.dataclass
 class Location:
     chapters: [int]
     verses: [int]
     
-@dataclass
+@dataclasses.dataclass
 class Reference:
     name: str
     locations: [Location]
+
+def flatten(l):
+    flat_list = []
+    _ = [flat_list.extend(item) if isinstance(item, list) else flat_list.append(item) for item in l if item]
+    return flat_list
     
 class Parser:
     VERSES_LOCATION_PATTERN = (
@@ -32,9 +38,35 @@ class Parser:
     @staticmethod
     def matches(string):
         m = [m.groupdict() for m in Parser.re_ref.finditer(string)]
-        #for d in m:
-        #    print(d)
-        return m
+        refs = []
+        for d in m:
+            l = [l.groupdict() for l in Parser.re_loc.finditer(d['Locations'])]
+            locations = []
+            for loc in l:
+                try:
+                    chVal = int(loc['Chapter'])
+                    chapters = [chVal]
+                    if loc['ChapterEnd'] != None:
+                        chEnd = int(loc['ChapterEnd'])
+                        chapters.append(list(range(chVal + 1, chEnd)))
+                    if loc['ChapterNext'] != None:
+                        chNext = int(loc['ChapterNext'])
+                        chapters.append(chNext)
+                    verses = []
+                    if loc['Verse'] != None:
+                        vrVal = int(loc['Verse'])
+                        verses = [vrVal]
+                        if loc['VerseEnd'] != None:
+                            vrEnd = int(loc['VerseEnd'])
+                            verses.append(list(range(vrVal + 1, vrEnd)))
+                        if loc['VerseNext'] != None:
+                            vrNext = int(loc['VerseNext'])
+                            verses.append(vrNext)
+                    locations.append(Location(flatten(chapters), flatten(verses)))
+                except Exception as e:
+                    raise NameError('No chapter found')
+            refs.append(Reference(d['Book'], locations))
+        return refs
             
 class BookMap:
     
@@ -69,6 +101,35 @@ class BookMap:
 
         return row["alt"]
         
+    def kjvBookId(self, book):
+        cursor = self.connection.cursor()
+        cursor.execute("select * from kjv_bible_books where alt == :alt", {"alt": book})
+        row = cursor.fetchone()
+        if row == None or row["id"] == None:
+            raise NameError("Book missing: " + book)
+        return row["id"]
+        
+    def validate(self):
+        try:
+            with self.connection:
+                cursor = self.connection.cursor()
+                rows = cursor.execute('select * from kjv_bible_daily;')
+                for row in rows:
+                    v = row['verses']
+                    m = Parser.matches(v)
+                    for ref in m:
+                        book = self.kjvBookId(ref.name)
+                        #print(book)
+                        for loc in ref.locations:
+                            if len(loc.verses) == 0 or len(loc.chapters) > 1:
+                                print("full chapter(s)")
+                            else:
+                                ()
+                                print("verses set: ", loc.verses)
+                    #break
+        except Exception as e:
+            print(e)
+            
     def showAllDaily(self):
         try:
             with self.connection:
@@ -115,6 +176,4 @@ class BookMap:
             print(e)
 
 if __name__ == '__main__':
-    # print(Parser.matches("Быт 1:2,3-4 3:3 & Jh 1"))
-    bmap = BookMap()
-    bmap.showAllYear()
+    BookMap().validate()
