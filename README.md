@@ -10,8 +10,9 @@ Table names are start with bible version prefix:
 ### Book names
 
 ```sql
-CREATE TABLE rst_bible_books (
+CREATE TABLE VERSION_bible_books (
     id   SMALLINT NOT NULL PRIMARY KEY,
+    idx  SMALLINT NOT NULL,
     book VARCHAR(40) NOT NULL,
     alt  VARCHAR(20) NOT NULL,
     abbr VARCHAR(20) NOT NULL,
@@ -22,7 +23,7 @@ CREATE TABLE rst_bible_books (
 ### Book verses
 
 ```sql
-CREATE TABLE rst_bible (
+CREATE TABLE VERSION_bible (
     book_id SMALLINT NOT NULL,
     chapter SMALLINT NOT NULL,
     verse   SMALLINT NOT NULL,
@@ -31,10 +32,10 @@ CREATE TABLE rst_bible (
 );
 ```
 
-### Verse of the day
+### Verse of the day (KJV book names)
 
 ```sql
-CREATE TABLE rst_bible_daily (
+CREATE TABLE kjv_bible_daily (
     id      SERIAL PRIMARY KEY,
     month   SMALLINT NOT NULL,
     day     SMALLINT NOT NULL,
@@ -45,12 +46,12 @@ CREATE TABLE rst_bible_daily (
 ```
 
 You can get daily verses by month, day and daytime (morning or evening).
-Verses goes in plain text with bible references: `Флп 3:13,14 Иоан 17:24; 2 Тим 1:12 Флп 1:6; 1 Кор 9:24,25 Евр 12:1,2`.
+Verses goes in plain text with bible references: `Phil 3:13,14 John 17:24; 2 Tim 1:12 Phil 1:6; 1 Cor 9:24,25 Heb 12:1,2`.
 
-### Daily reading verses
+### Daily reading verses (KJV book names)
 
 ```sql
-CREATE TABLE rst_bible_daily_roberts (
+CREATE TABLE kjv_bible_daily_roberts (
     month  SMALLINT NOT NULL,
     day    SMALLINT NOT NULL,
     verses VARCHAR(128) NOT NULL,
@@ -85,9 +86,9 @@ Step 3/6 : COPY data/rst_bible_books.sql /docker-entrypoint-initdb.d/10-rst-bibl
  ---> 5dd2349d357c
 Step 4/6 : COPY data/rst_bible_verses.sql /docker-entrypoint-initdb.d/20-rst-bible-verses.sql
  ---> 820b96d3e5f0
-Step 5/6 : COPY data/rst_bible_daily_verses.sql /docker-entrypoint-initdb.d/30-rst-bible-daily-verses.sql
+Step 5/6 : COPY data/kjv_bible_daily_verses.sql /docker-entrypoint-initdb.d/30-kjv-bible-daily-verses.sql
  ---> 167827c99771
-Step 6/6 : COPY data/rst_bible_daily_roberts.sql /docker-entrypoint-initdb.d/40-rst-bible-daily-reading.sql
+Step 6/6 : COPY data/kjv_bible_daily_roberts.sql /docker-entrypoint-initdb.d/40-kjv-bible-daily-reading.sql
  ---> da09204caa9b
 Successfully built da09204caa9b
 Successfully tagged docker-rst-bible-db_db:latest
