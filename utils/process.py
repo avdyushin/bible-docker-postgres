@@ -56,12 +56,17 @@ class Parser:
                     if loc['Verse'] != None:
                         vrVal = int(loc['Verse'])
                         verses = [vrVal]
-                        if loc['VerseEnd'] != None:
-                            vrEnd = int(loc['VerseEnd'])
-                            verses.append(list(range(vrVal + 1, vrEnd)))
-                        if loc['VerseNext'] != None:
+                        if loc['VerseNext'] != None and loc['VerseEnd'] != None:
                             vrNext = int(loc['VerseNext'])
-                            verses.append(vrNext)
+                            vrEnd = int(loc['VerseEnd'])
+                            verses.append(list(range(vrNext, vrEnd)))
+                        else:
+                            if loc['VerseEnd'] != None:
+                                vrEnd = int(loc['VerseEnd'])
+                                verses.append(list(range(vrVal + 1, vrEnd)))
+                            if loc['VerseNext'] != None:
+                                vrNext = int(loc['VerseNext'])
+                                verses.append(vrNext)
                     locations.append(Location(flatten(chapters), flatten(verses)))
                 except Exception as e:
                     raise NameError('No chapter found')
@@ -77,7 +82,7 @@ class BookMap:
             with self.connection:
                 self.connection.row_factory = sqlite3.Row
                 cursor = self.connection.cursor()
-                for f in ['rst_bible_books', 'kjv_bible_daily_verses', 'kjv_bible_daily_roberts', 'kjv_bible_books']:
+                for f in ['kjv_bible_books', 'kjv_bible_verses', 'kjv_bible_daily_verses', 'kjv_bible_daily_roberts']:
                     sql = open('../data/' + f + '.sql', encoding='utf-8')
                     cursor.executescript(sql.read())
                 self.connection.commit()
@@ -113,9 +118,10 @@ class BookMap:
         try:
             with self.connection:
                 cursor = self.connection.cursor()
-                rows = cursor.execute('select * from kjv_bible_daily;')
+                rows = cursor.execute('select * from kjv_bible_daily;').fetchall()
                 for row in rows:
                     v = row['verses']
+                    #print(v)
                     m = Parser.matches(v)
                     for ref in m:
                         book = self.kjvBookId(ref.name)
@@ -124,9 +130,15 @@ class BookMap:
                             if len(loc.verses) == 0 or len(loc.chapters) > 1:
                                 print("full chapter(s)")
                             else:
-                                ()
-                                print("verses set: ", loc.verses)
-                    #break
+                                fmt = 'select count(*) from kjv_bible where book_id == {book_id} and chapter == {chapter} and verse in ({list})'.format(book_id=book, chapter=loc.chapters[0], list=','.join(['?']*len(loc.verses)))
+                                c = self.connection.cursor()
+                                fet = c.execute(fmt, loc.verses)
+                                count = fet.fetchone()['count(*)']
+                                #print("verses set: ", loc.verses)
+                                #print(count)
+                                if len(loc.verses) != count:
+                                    #print(v, ref)
+                                    print("Invalid result for", ref.name, loc.chapters, loc.verses, count, v)
         except Exception as e:
             print(e)
             
